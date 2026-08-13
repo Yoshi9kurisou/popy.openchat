@@ -4,9 +4,20 @@
   <meta charset="UTF-8">
   <title>ぽぴオプ古参判定機</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
       background: #f7f7fb;
       margin: 0;
       padding: 16px;
@@ -14,13 +25,15 @@
     }
 
     .container {
+      width: 100%;
       max-width: 420px;
       margin: 0 auto;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 16px;
+      font-size: 24px;
+      margin: 8px 0 18px;
     }
 
     .box {
@@ -31,209 +44,963 @@
       margin-bottom: 16px;
     }
 
-    /* ランク背景 */
-    .bg-古参 { background: #fff7d6; }
-    .bg-準古参 { background: #eef1ff; }
-    .bg-中参 { background: #eaf7f1; }
-    .bg-新参 { background: #f1f1f1; }
-    .bg-新規 { background: #ecf8ee; }
-
     label {
       font-weight: bold;
     }
 
-    input, button {
+    input[type="date"] {
+      display: block;
       width: 100%;
       margin-top: 8px;
       padding: 12px;
       font-size: 16px;
       border-radius: 8px;
-      box-sizing: border-box; /* ← はみ出し防止 */
-    }
-
-    input {
       border: 1px solid #ccc;
     }
 
     button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
       background: #5b7cfa;
       color: white;
-      border: none;
       font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* =========================
+       ランク背景
+    ========================= */
+
+    .bg-古参 {
+      background: #fff7d6;
+    }
+
+    .bg-準古参 {
+      background: #eef1ff;
+    }
+
+    .bg-中参 {
+      background: #eaf7f1;
+    }
+
+    .bg-新参 {
+      background: #f1f1f1;
+    }
+
+    .bg-新規 {
+      background: #ecf8ee;
+    }
+
+    /* =========================
+       ランク文字色
+    ========================= */
+
+    .rank-古参 {
+      color: #d4a200;
+    }
+
+    .rank-準古参 {
+      color: #4a6cff;
+    }
+
+    .rank-中参 {
+      color: #2fa36b;
+    }
+
+    .rank-新参 {
+      color: #888;
+    }
+
+    .rank-新規 {
+      color: #7bc96f;
     }
 
     .result-rank {
       text-align: center;
       font-size: 22px;
+      line-height: 1.35;
+      margin-top: 8px;
     }
 
     .rank-name {
-      font-size: 34px;
+      display: inline-block;
+      font-size: 36px;
       font-weight: 800;
+      margin: 4px 0;
     }
-
-    /* ランク文字色 */
-    .rank-古参 { color: #d4a200; }
-    .rank-準古参 { color: #4a6cff; }
-    .rank-中参 { color: #2fa36b; }
-    .rank-新参 { color: #888; }
-    .rank-新規 { color: #7bc96f; }
 
     .sub {
       text-align: center;
       color: #555;
-      margin-top: 6px;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .highlight {
+      font-weight: bold;
     }
 
     .celebrate {
       text-align: center;
+      font-size: 19px;
       font-weight: bold;
-      font-size: 18px;
-      margin-top: 8px;
+      margin-top: 14px;
     }
+
+    /* =========================
+       実績
+    ========================= */
+
+    .achievement {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(180,140,0,0.25);
+      text-align: center;
+    }
+
+    .achievement-title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .achievement-name {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .achievement-description {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       今日の古参
+    ========================= */
+
+    .today-box {
+      text-align: center;
+    }
+
+    .today-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .today-date {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       エラー
+    ========================= */
 
     .error {
       color: #d33;
       font-weight: bold;
       text-align: center;
+      line-height: 1.6;
     }
+
+    .small-note {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 380px) {
+      body {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+
+      .box {
+        padding: 14px;
+      }
+
+      .rank-name {
+        font-size: 32px;
+      }
+    }
+
+	/* =========================
+   バージョン表示
+========================= */
+
+.version-info {
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 22px 0 10px;
+}
+
+.history-button {
+  width: auto;
+  margin-top: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 999px;
+  background: #eeeeee;
+  color: #555;
+  border: 1px solid #d0d0d0;
+}
+
+/* =========================
+   バージョン履歴モーダル
+========================= */
+
+.version-modal {
+  display: none;
+
+  position: fixed;
+  z-index: 1000;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  padding: 20px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.version-modal-content {
+  position: relative;
+
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+
+  overflow-y: auto;
+
+  background: white;
+  border-radius: 16px;
+
+  padding: 22px;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.version-modal-content h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+
+  top: 8px;
+  right: 10px;
+
+  width: 36px;
+  height: 36px;
+
+  margin: 0;
+  padding: 0;
+
+  border-radius: 50%;
+
+  background: #eeeeee;
+  color: #555;
+
+  font-size: 24px;
+  line-height: 36px;
+
+  border: none;
+}
+
+.version-item {
+  padding: 14px 0;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.version-item:last-child {
+  border-bottom: none;
+}
+
+.version-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.version-date {
+  font-size: 13px;
+  color: #777;
+  margin-top: 2px;
+}
+
+.version-item ul {
+  margin-top: 8px;
+  padding-left: 20px;
+  line-height: 1.6;
+}
   </style>
 </head>
+
 <body>
 
 <div class="container">
 
-<h1>ぽぴオプ古参判定機</h1>
+  <h1>ぽぴオプ古参判定機</h1>
 
-<div class="box">
-  <label>参加した日を入力してね</label>
-  <input type="date" id="joinDate">
-  <button onclick="judge()">判定する！</button>
+  <div class="box">
+
+    <label for="joinDate">
+      参加した日を入力してね
+    </label>
+
+    <input type="date" id="joinDate">
+
+    <button onclick="judge()">
+      判定する！
+    </button>
+
+  </div>
+
+  <div
+    class="box"
+    id="result"
+    style="display: none;"
+  ></div>
+
+  <div class="box today-box" id="todayVeteran"></div>
+
+  <div class="small-note">
+    全期間：2023/12/25～現在<br>
+    旧オプ閉鎖・新オプ創設：2026/05/18
+  </div>
+
 </div>
 
-<div class="box" id="result" style="display:none;"></div>
-<div class="box" id="todayVeteran"></div>
-
-</div>
 
 <script>
-const OPEN_DATE = new Date("2023-12-25");
 
-function daysBetween(a, b) {
-  return Math.floor((b - a) / 86400000);
-}
+  /* ==============================
+     基本設定
+  ============================== */
 
-function findPromotionDate(joinDate, ratioTarget) {
-  let d = new Date();
-  d.setHours(0,0,0,0);
+  const OPEN_DATE =
+    new Date(2023, 11, 25);
 
-  for (let i = 0; i < 2000; i++) {
-    const total = daysBetween(OPEN_DATE, d) + 1;
-    const stay = daysBetween(joinDate, d) + 1;
-    if (stay / total >= ratioTarget) return new Date(d);
-    d.setDate(d.getDate() + 1);
-  }
-  return null;
-}
+  const OLD_CLOSE_DATE =
+    new Date(2026, 4, 18);
 
-function judge() {
-  const input = document.getElementById("joinDate").value;
-  const result = document.getElementById("result");
-  result.style.display = "block";
-  result.className = "box";
+  const DAY_MS =
+    24 * 60 * 60 * 1000;
 
-  if (!input) {
-    result.innerHTML = "<div class='error'>日付を入力してね！</div>";
-    return;
+
+  /* ==============================
+     日付を0時にそろえる
+  ============================== */
+
+  function normalizeDate(date) {
+    const result = new Date(date);
+
+    result.setHours(0, 0, 0, 0);
+
+    return result;
   }
 
-  const joinDate = new Date(input);
-  const today = new Date();
-  today.setHours(0,0,0,0);
 
-  if (joinDate < OPEN_DATE) {
-    result.innerHTML = `
-      <div class="error">
-        入力した日にちの時、このオプは存在していないよ。<br>
-        正確な参加日を思い出して！
-      </div>`;
-    return;
+  /* ==============================
+     日数計算
+  ============================== */
+
+  function daysBetween(start, end) {
+
+    const a = normalizeDate(start);
+    const b = normalizeDate(end);
+
+    return Math.floor(
+      (b - a) / DAY_MS
+    );
   }
 
-  const stayDays = daysBetween(joinDate, today) + 1;
-  const totalDays = daysBetween(OPEN_DATE, today) + 1;
-  const ratio = stayDays / totalDays;
 
-  let rank, message, nextTarget, nextName;
+  /* ==============================
+     日付表示
+  ============================== */
 
-  if (stayDays <= 7) {
-    rank = "新規";
-    message = "ようこそ！まずは中参を目指そう！";
-    nextTarget = 0.25;
-    nextName = "中参";
-  } else if (ratio >= 0.7) {
-    rank = "古参";
-    message = "これからも長くオプにいてね";
-  } else if (ratio >= 0.5) {
-    rank = "準古参";
-    message = "もう一息で古参！";
-    nextTarget = 0.7;
-    nextName = "古参";
-  } else if (ratio >= 0.25) {
-    rank = "中参";
-    message = "少しずつ歴史が増えてきたね！";
-    nextTarget = 0.5;
-    nextName = "準古参";
-  } else {
-    rank = "新参";
-    message = "ここからがスタート！";
-    nextTarget = 0.25;
-    nextName = "中参";
+  function formatDate(date) {
+
+    const d =
+      normalizeDate(date);
+
+    return (
+      d.getFullYear() +
+      "/" +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      "/" +
+      String(d.getDate()).padStart(2, "0")
+    );
   }
 
-  result.classList.add(`bg-${rank}`);
 
-  let nextText = "";
-  if (nextTarget) {
-    const date = findPromotionDate(joinDate, nextTarget);
-    const remain = daysBetween(today, date);
+  /* ==============================
+     入力欄の日付を安全に取得
+  ============================== */
 
-    if (remain === 0) {
-      nextText = `<div class="celebrate">🎉 ${nextName}に昇格！おめでとう！</div>`;
-    } else {
-      nextText = `
-        <div class="sub">
-          <span class="highlight">${nextName}</span> まであと
-          <span class="highlight">${remain}</span> 日
-        </div>`;
+  function parseInputDate(input) {
+
+    const parts =
+      input.split("-").map(Number);
+
+    return new Date(
+      parts[0],
+      parts[1] - 1,
+      parts[2]
+    );
+  }
+
+
+  /* ==============================
+     昇格予定日を計算
+  ============================== */
+
+  function findPromotionDate(
+    joinDate,
+    ratioTarget
+  ) {
+
+    let d =
+      normalizeDate(new Date());
+
+    /*
+      未来の日付を順番に調べて、
+      初めて目標割合を超える日を探す。
+    */
+
+    for (let i = 0; i < 3650; i++) {
+
+      const totalDays =
+        daysBetween(
+          OPEN_DATE,
+          d
+        ) + 1;
+
+      const stayDays =
+        daysBetween(
+          joinDate,
+          d
+        ) + 1;
+
+      const ratio =
+        stayDays / totalDays;
+
+      if (ratio >= ratioTarget) {
+        return new Date(d);
+      }
+
+      d.setDate(
+        d.getDate() + 1
+      );
     }
+
+    return null;
   }
 
-  result.innerHTML = `
-    <div class="sub">あなたの参加日：${input}</div>
-    <div class="result-rank">
-      あなたは<br>
-      <span class="rank-name rank-${rank}">${rank}</span><br>
-      です！
-    </div>
-    <div class="sub">${message}</div>
-    ${nextText}
-  `;
+
+  /* ==============================
+     ランク判定
+  ============================== */
+
+  function determineRank(
+    joinDate,
+    today
+  ) {
+
+    const stayDays =
+      daysBetween(
+        joinDate,
+        today
+      ) + 1;
+
+    const totalDays =
+      daysBetween(
+        OPEN_DATE,
+        today
+      ) + 1;
+
+    const ratio =
+      stayDays / totalDays;
+
+    let rank;
+    let message;
+    let nextTarget = null;
+    let nextName = null;
+
+
+    /* 参加7日以内 */
+    if (stayDays <= 7) {
+
+      rank = "新規";
+
+      message =
+        "ようこそ！まずは中参を目指そう！";
+
+      nextTarget = 0.25;
+      nextName = "中参";
+    }
+
+
+    /* 古参 */
+    else if (ratio >= 0.70) {
+
+      rank = "古参";
+
+      message =
+        "これからも長くオプにいてね";
+    }
+
+
+    /* 準古参 */
+    else if (ratio >= 0.50) {
+
+      rank = "準古参";
+
+      message =
+        "もう一息で古参！";
+
+      nextTarget = 0.70;
+      nextName = "古参";
+    }
+
+
+    /* 中参 */
+    else if (ratio >= 0.25) {
+
+      rank = "中参";
+
+      message =
+        "少しずつ歴史が増えてきたね！";
+
+      nextTarget = 0.50;
+      nextName = "準古参";
+    }
+
+
+    /* 新参 */
+    else {
+
+      rank = "新参";
+
+      message =
+        "ここからがスタート！";
+
+      nextTarget = 0.25;
+      nextName = "中参";
+    }
+
+
+    return {
+      rank,
+      message,
+      nextTarget,
+      nextName,
+      ratio,
+      stayDays,
+      totalDays
+    };
+  }
+
+
+  /* ==============================
+     メイン判定
+  ============================== */
+
+  function judge() {
+
+    const input =
+      document.getElementById(
+        "joinDate"
+      ).value;
+
+    const result =
+      document.getElementById(
+        "result"
+      );
+
+    result.style.display = "block";
+
+    result.className = "box";
+
+
+    /* 未入力 */
+    if (!input) {
+
+      result.innerHTML = `
+        <div class="error">
+          参加日を入力してね！
+        </div>
+      `;
+
+      return;
+    }
+
+
+    const joinDate =
+      parseInputDate(input);
+
+    const today =
+      normalizeDate(new Date());
+
+
+    /* オプ創設前 */
+    if (joinDate < OPEN_DATE) {
+
+      result.innerHTML = `
+        <div class="error">
+          入力した日にちの時、
+          このオプはまだ存在していないよ。<br>
+          正確な参加日を思い出して！
+        </div>
+      `;
+
+      return;
+    }
+
+
+    /* 未来の日付 */
+    if (joinDate > today) {
+
+      result.innerHTML = `
+        <div class="error">
+          未来の日付は参加日として
+          入力できないよ！
+        </div>
+      `;
+
+      return;
+    }
+
+
+    /* ==============================
+       全期間基準で判定
+    ============================== */
+
+    const data =
+      determineRank(
+        joinDate,
+        today
+      );
+
+
+    result.classList.add(
+      `bg-${data.rank}`
+    );
+
+
+    /* ==============================
+       次のランク
+    ============================== */
+
+    let nextText = "";
+
+
+    if (data.nextTarget) {
+
+      const promotionDate =
+        findPromotionDate(
+          joinDate,
+          data.nextTarget
+        );
+
+
+      if (promotionDate) {
+
+        const remain =
+          daysBetween(
+            today,
+            promotionDate
+          );
+
+
+        if (remain <= 0) {
+
+          nextText = `
+            <div class="celebrate">
+              🎉 ${data.nextName}に昇格！
+              おめでとう！
+            </div>
+          `;
+
+        } else {
+
+          nextText = `
+            <div class="sub">
+              <span class="highlight">
+                ${data.nextName}
+              </span>
+              まであと
+              <span class="highlight">
+                ${remain}
+              </span>
+              日
+              <br>
+              （${formatDate(promotionDate)}）
+            </div>
+          `;
+        }
+      }
+    }
+
+
+    /* ==============================
+       旧オプ参加者実績
+    ============================== */
+
+    let achievementText = "";
+
+
+    if (joinDate <= OLD_CLOSE_DATE) {
+
+      achievementText = `
+        <div class="achievement">
+
+          <div class="achievement-title">
+            🏆 実績解除！
+          </div>
+
+          <div class="achievement-name">
+            旧オプ参加者
+          </div>
+
+          <div class="achievement-description">
+            旧オプに参加していた証
+          </div>
+
+        </div>
+      `;
+    }
+
+
+    /* ==============================
+       結果表示
+    ============================== */
+
+    result.innerHTML = `
+
+      <div class="sub">
+        参加日：${formatDate(joinDate)}
+      </div>
+
+      <div class="result-rank">
+
+        あなたは<br>
+
+        <span class="rank-name rank-${data.rank}">
+          ${data.rank}
+        </span>
+
+        <br>
+
+        です！
+
+      </div>
+
+      <div class="sub">
+        ${data.message}
+      </div>
+
+      ${nextText}
+
+      ${achievementText}
+
+    `;
+  }
+
+
+  /* ==============================
+     今日、古参になる人の参加日
+  ============================== */
+
+  function showTodayVeteran() {
+
+    const today =
+      normalizeDate(new Date());
+
+
+    /*
+      全期間の日数
+    */
+    const totalDays =
+      daysBetween(
+        OPEN_DATE,
+        today
+      ) + 1;
+
+
+    /*
+      古参に必要な在籍日数
+      70%以上なので切り上げ
+    */
+    const requiredStayDays =
+      Math.ceil(
+        totalDays * 0.70
+      );
+
+
+    /*
+      今日の時点で必要在籍日数を
+      満たす最も新しい参加日。
+    */
+    const veteranJoinDate =
+      new Date(today);
+
+    veteranJoinDate.setDate(
+      veteranJoinDate.getDate()
+      - requiredStayDays
+      + 1
+    );
+
+
+    document.getElementById(
+      "todayVeteran"
+    ).innerHTML = `
+
+      <div class="today-title">
+        📌 今日、古参になる人の参加日
+      </div>
+
+      <div class="today-date">
+        ${formatDate(veteranJoinDate)}以前
+      </div>
+
+      <div class="sub">
+        この日以前に参加している人は、
+        今日の時点で古参です。
+      </div>
+
+	<div class="version-info">
+  	ぽぴオプ古参判定機 v2.0.0
+  	<br>
+  	最終更新：2026/08/13
+  	<br>
+  	<button class="history-button" onclick="openVersionHistory()">
+  	  📜 バージョン履歴
+  	</button>
+	</div>
+
+    `;
+  }
+
+
+  /* ==============================
+     ページ読み込み時
+  ============================== */
+
+  showTodayVeteran();
+
+/* =========================
+   バージョン履歴
+========================= */
+
+function openVersionHistory() {
+  const modal =
+    document.getElementById("versionModal");
+
+  modal.style.display = "flex";
 }
 
-// 今日古参になる人
-(function () {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  const total = daysBetween(OPEN_DATE, today) + 1;
-  const need = Math.ceil(total * 0.7);
-  const join = new Date(OPEN_DATE);
-  join.setDate(OPEN_DATE.getDate() + total - need);
-  document.getElementById("todayVeteran").innerHTML =
-    `<b>今日、古参になる人の参加日</b><br>${join.toISOString().slice(0,10)}`;
-})();
+function closeVersionHistory() {
+  const modal =
+    document.getElementById("versionModal");
+
+  modal.style.display = "none";
+}
+
+/*
+  背景部分をタップしても閉じる
+*/
+document.addEventListener("click", function(event) {
+
+  const modal =
+    document.getElementById("versionModal");
+
+  if (event.target === modal) {
+    closeVersionHistory();
+  }
+
+});
+
 </script>
+
+<div id="versionModal" class="version-modal">
+
+  <div class="version-modal-content">
+
+    <button
+      class="close-button"
+      onclick="closeVersionHistory()"
+      aria-label="閉じる"
+    >
+      ×
+    </button>
+
+    <h2>📜 バージョン履歴</h2>
+
+    <div class="version-item">
+      <div class="version-title">
+        v2.0.0
+      </div>
+
+      <div class="version-date">
+        2026/08/13
+      </div>
+
+      <ul>
+        <li>新オプに対応</li>
+        <li>「🏆 旧オプ参加者」実績を追加</li>
+        <li>「今日、古参になる人の参加日」の計算を修正</li>
+      </ul>
+    </div>
+
+    <div class="version-item">
+      <div class="version-title">
+        v1.0.0
+      </div>
+
+      <div class="version-date">
+        初代公開版
+      </div>
+
+      <ul>
+        <li>古参判定機を公開</li>
+        <li>古参・準古参・中参・新参を実装</li>
+        <li>新規ランクを実装</li>
+        <li>昇格予定日を表示</li>
+        <li>スマホ表示に対応</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
 
 </body>
 </html>
-
