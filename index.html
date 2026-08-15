@@ -2088,49 +2088,7 @@
           pSemi,
           pOld
         );
-    }
-
-
-    addCurrentLine(
-      track,
-      currentPosition,
-      "現在"
-    );
-
-
-    setupSimpleTimelineSearch(
-      track,
-      joinDate,
-      today,
-      oldDate,
-      isOld
-    );
-
-
-    document.getElementById(
-      "currentStatus"
-    ).innerHTML = `
-
-      <div class="current-status-title">
-        現在
-      </div>
-
-      <div
-        class="current-status-rank rank-${currentRank.rank}"
-      >
-        ${currentRank.rank}
-      </div>
-
-      <div class="sub">
-        在籍率：
-        ${
-          (
-            currentRank.ratio * 100
-          ).toFixed(1)
-        }%
-      </div>
-
-    `;
+    };
 
 
     document.getElementById(
