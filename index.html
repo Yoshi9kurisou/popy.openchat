@@ -2,8 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ぽぴオプ古参判定機</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ぽぴオプ古参判定機</title>
 
   <style>
     * {
@@ -11,40 +12,40 @@
     }
 
     body {
+      margin: 0;
+      padding: 16px;
+      background: #f7f7fb;
+      color: #333;
       font-family:
         system-ui,
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
-
-      background: #f7f7fb;
-      margin: 0;
-      padding: 16px;
-      color: #333;
     }
 
     .container {
       width: 100%;
-      max-width: 420px;
+      max-width: 460px;
       margin: 0 auto;
     }
 
     h1 {
+      margin: 8px 0 18px;
       text-align: center;
       font-size: 24px;
-      margin: 8px 0 18px;
     }
 
     .box {
-      background: #fff;
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       margin-bottom: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     label {
+      display: block;
       font-weight: bold;
     }
 
@@ -53,20 +54,21 @@
       width: 100%;
       margin-top: 8px;
       padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
       border: 1px solid #ccc;
+      border-radius: 9px;
+      background: #fff;
+      font-size: 16px;
     }
 
     button {
       width: 100%;
       margin-top: 12px;
       padding: 13px;
-      font-size: 16px;
-      border-radius: 8px;
       border: none;
+      border-radius: 9px;
       background: #5b7cfa;
-      color: white;
+      color: #fff;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -75,9 +77,9 @@
       transform: scale(0.98);
     }
 
-    /* =========================
+    /* ==================================================
        ランク背景
-    ========================= */
+    ================================================== */
 
     .bg-古参 {
       background: #fff7d6;
@@ -99,9 +101,9 @@
       background: #ecf8ee;
     }
 
-    /* =========================
+    /* ==================================================
        ランク文字色
-    ========================= */
+    ================================================== */
 
     .rank-古参 {
       color: #d4a200;
@@ -123,25 +125,29 @@
       color: #7bc96f;
     }
 
+    /* ==================================================
+       結果
+    ================================================== */
+
     .result-rank {
+      margin-top: 8px;
       text-align: center;
       font-size: 22px;
       line-height: 1.35;
-      margin-top: 8px;
     }
 
     .rank-name {
       display: inline-block;
+      margin: 4px 0;
       font-size: 36px;
       font-weight: 800;
-      margin: 4px 0;
     }
 
     .sub {
-      text-align: center;
-      color: #555;
       margin-top: 8px;
-      line-height: 1.5;
+      color: #555;
+      text-align: center;
+      line-height: 1.55;
     }
 
     .highlight {
@@ -149,218 +155,811 @@
     }
 
     .celebrate {
+      margin-top: 14px;
+      color: #a16f00;
       text-align: center;
       font-size: 19px;
       font-weight: bold;
-      margin-top: 14px;
     }
 
-    /* =========================
+    .error {
+      color: #d33;
+      text-align: center;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+
+    /* ==================================================
        実績
-    ========================= */
+    ================================================== */
 
     .achievement {
       margin-top: 18px;
       padding: 14px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(180,140,0,0.25);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(180, 140, 0, 0.25);
       text-align: center;
     }
 
     .achievement-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: bold;
-      margin-bottom: 6px;
     }
 
     .achievement-name {
+      margin-top: 4px;
       font-size: 22px;
       font-weight: 800;
     }
 
     .achievement-description {
       margin-top: 5px;
-      font-size: 13px;
       color: #666;
+      font-size: 13px;
+    }
+
+    /* ==================================================
+       通常メーター
+    ================================================== */
+
+    .timeline-title {
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .simple-timeline {
+      position: relative;
+      width: 100%;
+      padding: 54px 12px 62px;
+      touch-action: none;
+    }
+
+    .simple-track {
+      position: relative;
+      width: 100%;
+      height: 28px;
+      border-radius: 999px;
+      overflow: visible;
+    }
+
+    .simple-segment {
+      position: absolute;
+      top: 0;
+      height: 28px;
+    }
+
+    .segment-newbie {
+      background: #ecf8ee;
+    }
+
+    .segment-new {
+      background: #eeeeee;
+    }
+
+    .segment-mid {
+      background: #dff1e8;
+    }
+
+    .segment-semi {
+      background: #e5e9ff;
+    }
+
+    .segment-old {
+      background: #fff0b5;
+    }
+
+    /* ==================================================
+       通常メーターのマーカー
+       大きめの当たり判定
+    ================================================== */
+
+    .milestone-hitbox {
+      position: absolute;
+      top: 50%;
+      width: 56px;
+      height: 56px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 30;
+    }
+
+    .milestone-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 22px;
+      height: 22px;
+      transform: translate(-50%, -50%);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.25);
+    }
+
+    .dot-participation {
+      background: #555;
+    }
+
+    .dot-new {
+      background: #888;
+    }
+
+    .dot-mid {
+      background: #2fa36b;
+    }
+
+    .dot-semi {
+      background: #4a6cff;
+    }
+
+    .dot-old {
+      background: #d4a200;
+    }
+
+    .milestone-label {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 6px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .milestone-date {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 8px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      color: #666;
+      font-size: 10px;
+    }
+
+    /* ==================================================
+       通常メーター 現在位置
+    ================================================== */
+
+    .simple-current {
+      position: absolute;
+      top: -9px;
+      width: 5px;
+      height: 46px;
+      border-radius: 999px;
+      background: #222;
+      transform: translateX(-50%);
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .current-label {
+      position: absolute;
+      top: -34px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    /* ==================================================
+       通常メーター 任意位置情報
+    ================================================== */
+
+    .simple-date-popup {
+      display: none;
+      position: absolute;
+      z-index: 100;
+      min-width: 170px;
+      padding: 10px 13px;
+      border-radius: 11px;
+      background: rgba(35, 35, 35, 0.96);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+      pointer-events: none;
+      transform: translateX(-50%);
+    }
+
+    .simple-date-popup.visible {
+      display: block;
+    }
+
+    .timeline-help {
+      margin-top: 10px;
+      color: #777;
+      text-align: center;
+      font-size: 12px;
       line-height: 1.5;
     }
 
-    /* =========================
-       今日の古参
-    ========================= */
+    .precision-button {
+      margin-top: 13px;
+      background: #f0f0f3;
+      color: #444;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    /* ==================================================
+       現在ステータス
+    ================================================== */
+
+    .current-status {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #f5f5f7;
+      text-align: center;
+    }
+
+    .current-status-title {
+      color: #777;
+      font-size: 12px;
+    }
+
+    .current-status-rank {
+      margin-top: 3px;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    /* ==================================================
+       精密タイムライン モーダル
+    ================================================== */
+
+    .precision-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.52);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .precision-modal.visible {
+      display: flex;
+    }
+
+    .precision-content {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      max-height: 92vh;
+      padding: 18px;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .precision-title {
+      margin-bottom: 13px;
+      text-align: center;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .precision-scroll {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 18px;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+
+      /* 参加地点だけがスナップ候補 */
+      scroll-snap-type: x proximity;
+      scroll-padding-left: 24px;
+    }
+
+    .precision-inner {
+      position: relative;
+      width: 5200px;
+      height: 350px;
+    }
+
+    .precision-track {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 120px;
+      height: 84px;
+      border-radius: 14px;
+      overflow: visible;
+    }
+
+    /* ==================================================
+       精密メーター 背景
+    ================================================== */
+
+    .precision-segment {
+      position: absolute;
+      top: 0;
+      height: 84px;
+    }
+
+    .precision-newbie {
+      background: #ecf8ee;
+    }
+
+    .precision-new {
+      background: #dfdfdf;
+    }
+
+    .precision-mid {
+      background: #dff1e8;
+    }
+
+    .precision-semi {
+      background: #e5e9ff;
+    }
+
+    .precision-old {
+      background: #fff0b5;
+    }
+
+    /* ==================================================
+       2026/05/18 左側の旧オプ領域
+       帯より少し広い範囲を後ろから染める
+    ================================================== */
+
+    .precision-old-era {
+  position: absolute;
+
+  /*
+    帯よりかなり広い範囲を
+    上下から包む。
+  */
+  top: -32px;
+  height: 148px;
+
+  /*
+    かなり薄い灰色。
+    新参の色を邪魔しにくくする。
+  */
+  background: rgba(0, 0, 0, 0.05);
+
+  pointer-events: none;
+
+  z-index: 0;
+
+  border-radius: 14px 0 0 14px;
+}
+
+    /* ==================================================
+       年月目盛り
+    ================================================== */
+
+    .time-tick {
+      position: absolute;
+      top: -48px;
+      height: 178px;
+      border-left: 1px solid rgba(0, 0, 0, 0.10);
+      pointer-events: none;
+    }
+
+    .time-tick.year {
+      border-left: 2px solid rgba(0, 0, 0, 0.28);
+    }
+
+    .time-tick-label {
+      position: absolute;
+      top: -40px;
+      left: 7px;
+      white-space: nowrap;
+      color: #666;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .time-tick.year .time-tick-label {
+      color: #333;
+      font-size: 13px;
+    }
+
+    /* ==================================================
+       精密メーター マーカー
+       小さめの当たり判定
+    ================================================== */
+
+    .precision-hitbox {
+      position: absolute;
+      top: 50%;
+      width: 32px;
+      height: 32px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 50;
+    }
+
+    .precision-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 24px;
+      height: 24px;
+      transform: translate(-50%, -50%);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.25);
+    }
+
+    .precision-label {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* マーカー下の日付は表示しない */
+    .precision-date {
+      display: none;
+    }
+
+    /* ==================================================
+       参加マーカー専用スナップポイント
+    ================================================== */
+
+    .precision-snap-point {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 84px;
+      scroll-snap-align: start;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ==================================================
+       オプ歴史イベントピン
+    ================================================== */
+
+    .history-pin {
+      position: absolute;
+      top: -54px;
+      width: 28px;
+      height: 28px;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 80;
+    }
+
+    .history-pin-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+    }
+
+    .history-pin-dot.creation {
+      background: #7a7a7a;
+    }
+
+    .history-pin-dot.change {
+      background: #5b7cfa;
+    }
+
+    /* ==================================================
+       固定イベント用ポップアップ
+    ================================================== */
+
+    .history-pin-popup {
+      display: none;
+      position: absolute;
+      z-index: 250;
+      min-width: 150px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      background: rgba(45, 45, 45, 0.97);
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: center;
+      pointer-events: none;
+      transform: translateX(-50%);
+    }
+
+    .history-pin-popup.visible {
+      display: block;
+    }
+
+    /* ==================================================
+       精密メーター 現在
+    ================================================== */
+
+    .precision-current {
+      position: absolute;
+      top: -15px;
+      width: 5px;
+      height: 114px;
+      border-radius: 999px;
+      background: #222;
+      transform: translateX(-50%);
+      z-index: 40;
+      pointer-events: none;
+    }
+
+    .precision-current-label {
+      position: absolute;
+      top: -43px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    /* ==================================================
+       精密メーター 情報枠
+    ================================================== */
+
+    .precision-date-popup {
+      display: none;
+      position: absolute;
+      z-index: 150;
+
+      min-width: 190px;
+      max-width: 260px;
+
+      padding: 12px 15px;
+
+      border-radius: 12px;
+
+      background: rgba(35, 35, 35, 0.97);
+      color: #fff;
+
+      font-size: 15px;
+      line-height: 1.55;
+
+      text-align: center;
+
+      pointer-events: none;
+
+      transform: translateX(-50%);
+    }
+
+    .precision-date-popup.visible {
+      display: block;
+    }
+
+    /* マーカーに触れた時だけ少し大きく */
+    .precision-date-popup.marker-mode {
+      min-width: 210px;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .precision-help {
+      margin-top: 8px;
+      color: #777;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .precision-close {
+      position: absolute;
+      top: 8px;
+      right: 9px;
+
+      width: 36px;
+      height: 36px;
+
+      margin: 0;
+      padding: 0;
+
+      border: none;
+      border-radius: 50%;
+
+      background: #eee;
+      color: #555;
+
+      font-size: 24px;
+      line-height: 36px;
+    }
+
+    /* ==================================================
+       今日古参
+    ================================================== */
 
     .today-box {
       text-align: center;
     }
 
     .today-title {
-      font-weight: bold;
       margin-bottom: 6px;
+      font-weight: bold;
     }
 
     .today-date {
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    /* ==================================================
+       バージョン
+    ================================================== */
+
+    .version-info {
+      margin: 22px 0 10px;
+      color: #777;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .history-button {
+      width: auto;
+      margin-top: 8px;
+      padding: 8px 14px;
+
+      border-radius: 999px;
+
+      background: #eee;
+      color: #555;
+
+      border: 1px solid #d0d0d0;
+
+      font-size: 13px;
+    }
+
+    .version-modal {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+
+      z-index: 3000;
+
+      padding: 20px;
+
+      background: rgba(0, 0, 0, 0.45);
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .version-modal.visible {
+      display: flex;
+    }
+
+    .version-modal-content {
+      position: relative;
+
+      width: 100%;
+      max-width: 430px;
+
+      max-height: 85vh;
+
+      overflow-y: auto;
+
+      padding: 22px;
+
+      border-radius: 16px;
+
+      background: #fff;
+
+      box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.2);
+    }
+
+    .version-modal-content h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+
+      width: 36px;
+      height: 36px;
+
+      margin: 0;
+      padding: 0;
+
+      border-radius: 50%;
+
+      background: #eee;
+      color: #555;
+
+      font-size: 24px;
+      line-height: 36px;
+    }
+
+    .version-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .version-item:last-child {
+      border-bottom: none;
+    }
+
+    .version-title {
       font-size: 20px;
       font-weight: bold;
     }
 
-    /* =========================
-       エラー
-    ========================= */
+    .version-date {
+      margin-top: 2px;
+      color: #777;
+      font-size: 13px;
+    }
 
-    .error {
-      color: #d33;
-      font-weight: bold;
-      text-align: center;
+    .version-item ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
       line-height: 1.6;
     }
 
     .small-note {
-      text-align: center;
+      margin-top: 18px;
       color: #777;
+      text-align: center;
       font-size: 12px;
       line-height: 1.5;
-      margin-top: 18px;
     }
 
+    /* ==================================================
+       スマホ
+    ================================================== */
+
     @media (max-width: 380px) {
+
       body {
         padding: 10px;
-      }
-
-      h1 {
-        font-size: 21px;
       }
 
       .box {
         padding: 14px;
       }
 
+      h1 {
+        font-size: 21px;
+      }
+
       .rank-name {
         font-size: 32px;
       }
+
+      .milestone-label,
+      .precision-label {
+        font-size: 10px;
+      }
+
+      .precision-date-popup.marker-mode {
+        min-width: 190px;
+        font-size: 15px;
+      }
+
+      .history-pin-popup {
+        min-width: 140px;
+        font-size: 11px;
+      }
     }
-
-	/* =========================
-   バージョン表示
-========================= */
-
-.version-info {
-  text-align: center;
-  color: #777;
-  font-size: 12px;
-  line-height: 1.6;
-  margin: 22px 0 10px;
-}
-
-.history-button {
-  width: auto;
-  margin-top: 8px;
-  padding: 8px 14px;
-  font-size: 13px;
-  border-radius: 999px;
-  background: #eeeeee;
-  color: #555;
-  border: 1px solid #d0d0d0;
-}
-
-/* =========================
-   バージョン履歴モーダル
-========================= */
-
-.version-modal {
-  display: none;
-
-  position: fixed;
-  z-index: 1000;
-
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0, 0, 0, 0.45);
-
-  padding: 20px;
-
-  align-items: center;
-  justify-content: center;
-}
-
-.version-modal-content {
-  position: relative;
-
-  width: 100%;
-  max-width: 420px;
-  max-height: 85vh;
-
-  overflow-y: auto;
-
-  background: white;
-  border-radius: 16px;
-
-  padding: 22px;
-
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-}
-
-.version-modal-content h2 {
-  margin-top: 0;
-  text-align: center;
-}
-
-.close-button {
-  position: absolute;
-
-  top: 8px;
-  right: 10px;
-
-  width: 36px;
-  height: 36px;
-
-  margin: 0;
-  padding: 0;
-
-  border-radius: 50%;
-
-  background: #eeeeee;
-  color: #555;
-
-  font-size: 24px;
-  line-height: 36px;
-
-  border: none;
-}
-
-.version-item {
-  padding: 14px 0;
-
-  border-bottom: 1px solid #eeeeee;
-}
-
-.version-item:last-child {
-  border-bottom: none;
-}
-
-.version-title {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.version-date {
-  font-size: 13px;
-  color: #777;
-  margin-top: 2px;
-}
-
-.version-item ul {
-  margin-top: 8px;
-  padding-left: 20px;
-  line-height: 1.6;
-}
   </style>
 </head>
+
 
 <body>
 
@@ -368,13 +967,21 @@
 
   <h1>ぽぴオプ古参判定機</h1>
 
+
+  <!-- ==================================================
+       入力
+  ================================================== -->
+
   <div class="box">
 
     <label for="joinDate">
       参加した日を入力してね
     </label>
 
-    <input type="date" id="joinDate">
+    <input
+      type="date"
+      id="joinDate"
+    >
 
     <button onclick="judge()">
       判定する！
@@ -382,17 +989,278 @@
 
   </div>
 
+
+  <!-- ==================================================
+       判定結果
+  ================================================== -->
+
   <div
-    class="box"
     id="result"
-    style="display: none;"
+    class="box"
+    style="display:none;"
   ></div>
 
-  <div class="box today-box" id="todayVeteran"></div>
+
+  <!-- ==================================================
+       通常メーター
+  ================================================== -->
+
+  <div
+    id="timelineBox"
+    class="box"
+    style="display:none;"
+  >
+
+    <div class="timeline-title">
+      在籍率メーター
+    </div>
+
+
+    <div
+      id="simpleTimeline"
+      class="simple-timeline"
+    >
+
+      <div
+        id="simpleTrack"
+        class="simple-track"
+      ></div>
+
+
+      <div
+        id="simpleDatePopup"
+        class="simple-date-popup"
+      ></div>
+
+    </div>
+
+
+    <div class="timeline-help">
+
+      ライン上の好きな場所に
+      カーソルを合わせるかタップすると、
+      その時点の日付とランクを確認できます。<br>
+
+      マーカーに触れると、
+      その節目の詳細が表示されます。
+
+    </div>
+
+
+    <button
+      class="precision-button"
+      onclick="openPrecisionTimeline()"
+    >
+      🔎 拡大して見る
+    </button>
+
+
+    <div
+      id="currentStatus"
+      class="current-status"
+    ></div>
+
+  </div>
+
+
+  <!-- ==================================================
+       今日古参
+  ================================================== -->
+
+  <div
+    id="todayVeteran"
+    class="box today-box"
+  ></div>
+
+
+  <!-- ==================================================
+       バージョン
+  ================================================== -->
+
+  <div class="version-info">
+
+    ぽぴオプ古参判定機 v3.0.0
+    <br>
+    最終更新：2026/08/16
+    <br>
+
+    <button
+      class="history-button"
+      onclick="openVersionHistory()"
+    >
+      📜 バージョン履歴
+    </button>
+
+  </div>
+
 
   <div class="small-note">
     全期間：2023/12/25～現在<br>
-    旧オプ閉鎖・新オプ創設：2026/05/18
+    旧オプ閉鎖・新オプ作成：2026/05/18
+  </div>
+
+</div>
+
+
+<!-- ==================================================
+     精密タイムライン
+================================================== -->
+
+<div
+  id="precisionModal"
+  class="precision-modal"
+>
+
+  <div class="precision-content">
+
+    <button
+      class="precision-close"
+      onclick="closePrecisionTimeline()"
+      aria-label="閉じる"
+    >
+      ×
+    </button>
+
+
+    <div class="precision-title">
+      🔎 オプ人生タイムライン
+    </div>
+
+
+    <div
+      id="precisionScroll"
+      class="precision-scroll"
+    >
+
+      <div
+        id="precisionInner"
+        class="precision-inner"
+      >
+
+        <div
+          id="precisionTrack"
+          class="precision-track"
+        ></div>
+
+
+        <!-- 通常日時情報 -->
+
+        <div
+          id="precisionDatePopup"
+          class="precision-date-popup"
+        ></div>
+
+
+        <!-- 固定イベント情報 -->
+
+        <div
+          id="historyPinPopup"
+          class="history-pin-popup"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+    <div class="precision-help">
+
+      オプ創設からあなたが古参になるまでの年表です。<br>
+
+      既に古参の方は、現在まで表示しております。<br>
+
+      年表上の好きな場所をタップ・クリックすると、
+      その時点を確認できます。
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ==================================================
+     バージョン履歴
+================================================== -->
+
+<div
+  id="versionModal"
+  class="version-modal"
+>
+
+  <div class="version-modal-content">
+
+    <button
+      class="close-button"
+      onclick="closeVersionHistory()"
+      aria-label="閉じる"
+    >
+      ×
+    </button>
+
+
+    <h2>
+      📜 バージョン履歴
+    </h2>
+
+
+    <div class="version-item">
+
+      <div class="version-title">
+        v3.0.0
+      </div>
+
+      <div class="version-date">
+        2026/08/16
+      </div>
+
+      <ul>
+        <li>在籍率メーターの導入</li>
+      </ul>
+
+    </div>
+
+
+    <div class="version-item">
+
+      <div class="version-title">
+        v2.0.0
+      </div>
+
+      <div class="version-date">
+        2026/08/13
+      </div>
+
+      <ul>
+        <li>新オプに対応</li>
+        <li>旧オプを含めた全期間でランク判定する仕様に変更</li>
+        <li>「🏆旧オプ参加者」実績を追加</li>
+        <li>「今日、古参になる人の参加日」を修正</li>
+      </ul>
+
+    </div>
+
+
+    <div class="version-item">
+
+      <div class="version-title">
+        v1.0.0
+      </div>
+
+      <div class="version-date">
+        初代公開版
+      </div>
+
+      <ul>
+        <li>古参判定機を公開</li>
+        <li>古参・準古参・中参・新参を実装</li>
+        <li>新規ランクを実装</li>
+        <li>昇格予定日を表示</li>
+        <li>スマホ表示に対応</li>
+      </ul>
+
+    </div>
+
   </div>
 
 </div>
@@ -400,9 +1268,9 @@
 
 <script>
 
-  /* ==============================
+  /* ==================================================
      基本設定
-  ============================== */
+  ================================================== */
 
   const OPEN_DATE =
     new Date(2023, 11, 25);
@@ -414,61 +1282,57 @@
     24 * 60 * 60 * 1000;
 
 
-  /* ==============================
-     日付を0時にそろえる
-  ============================== */
+  let timelineJoinDate = null;
+  let timelineToday = null;
+
+
+  /*
+    参加地点のスクロール位置
+  */
+
+  let precisionJoinSnapPosition = null;
+
+
+  /*
+    前回のスクロール位置
+  */
+
+  let precisionLastScrollLeft = 0;
+
+
+  /*
+    方向制御初期化済みか
+  */
+
+  let precisionDirectionalSnapInitialized = false;
+
+
+  /* ==================================================
+     日付処理
+  ================================================== */
 
   function normalizeDate(date) {
-    const result = new Date(date);
 
-    result.setHours(0, 0, 0, 0);
+    const result =
+      new Date(date);
+
+    result.setHours(
+      0,
+      0,
+      0,
+      0
+    );
 
     return result;
   }
 
 
-  /* ==============================
-     日数計算
-  ============================== */
-
-  function daysBetween(start, end) {
-
-    const a = normalizeDate(start);
-    const b = normalizeDate(end);
-
-    return Math.floor(
-      (b - a) / DAY_MS
-    );
-  }
-
-
-  /* ==============================
-     日付表示
-  ============================== */
-
-  function formatDate(date) {
-
-    const d =
-      normalizeDate(date);
-
-    return (
-      d.getFullYear() +
-      "/" +
-      String(d.getMonth() + 1).padStart(2, "0") +
-      "/" +
-      String(d.getDate()).padStart(2, "0")
-    );
-  }
-
-
-  /* ==============================
-     入力欄の日付を安全に取得
-  ============================== */
-
   function parseInputDate(input) {
 
     const parts =
-      input.split("-").map(Number);
+      input
+        .split("-")
+        .map(Number);
 
     return new Date(
       parts[0],
@@ -478,24 +1342,157 @@
   }
 
 
-  /* ==============================
-     昇格予定日を計算
-  ============================== */
+  function daysBetween(
+    start,
+    end
+  ) {
+
+    const a =
+      normalizeDate(start);
+
+    const b =
+      normalizeDate(end);
+
+    return Math.floor(
+      (b - a) / DAY_MS
+    );
+  }
+
+
+  function formatDate(date) {
+
+    const d =
+      normalizeDate(date);
+
+    return (
+      d.getFullYear() +
+      "/" +
+      String(
+        d.getMonth() + 1
+      ).padStart(2, "0") +
+      "/" +
+      String(
+        d.getDate()
+      ).padStart(2, "0")
+    );
+  }
+
+
+  /* ==================================================
+     任意日時のランク
+  ================================================== */
+
+  function getRankAtDate(
+    joinDate,
+    targetDate
+  ) {
+
+    const join =
+      normalizeDate(joinDate);
+
+    const target =
+      normalizeDate(targetDate);
+
+
+    if (
+      target < join
+    ) {
+
+      return {
+        rank: "未参加",
+        ratio: 0
+      };
+    }
+
+
+    const stayDays =
+      daysBetween(
+        join,
+        target
+      ) + 1;
+
+
+    const totalDays =
+      daysBetween(
+        OPEN_DATE,
+        target
+      ) + 1;
+
+
+    const ratio =
+      stayDays /
+      totalDays;
+
+
+    if (
+      stayDays <= 7
+    ) {
+
+      return {
+        rank: "新規",
+        ratio
+      };
+    }
+
+
+    if (
+      ratio >= 0.70
+    ) {
+
+      return {
+        rank: "古参",
+        ratio
+      };
+    }
+
+
+    if (
+      ratio >= 0.50
+    ) {
+
+      return {
+        rank: "準古参",
+        ratio
+      };
+    }
+
+
+    if (
+      ratio >= 0.25
+    ) {
+
+      return {
+        rank: "中参",
+        ratio
+      };
+    }
+
+
+    return {
+      rank: "新参",
+      ratio
+    };
+  }
+
+
+  /* ==================================================
+     昇格日
+  ================================================== */
 
   function findPromotionDate(
     joinDate,
-    ratioTarget
+    targetRatio
   ) {
 
     let d =
-      normalizeDate(new Date());
+      normalizeDate(joinDate);
 
-    /*
-      未来の日付を順番に調べて、
-      初めて目標割合を超える日を探す。
-    */
 
-    for (let i = 0; i < 3650; i++) {
+    for (
+      let i = 0;
+      i < 3650;
+      i++
+    ) {
 
       const totalDays =
         daysBetween(
@@ -503,135 +1500,84 @@
           d
         ) + 1;
 
+
       const stayDays =
         daysBetween(
           joinDate,
           d
         ) + 1;
 
-      const ratio =
-        stayDays / totalDays;
 
-      if (ratio >= ratioTarget) {
+      const ratio =
+        stayDays /
+        totalDays;
+
+
+      if (
+        ratio >= targetRatio
+      ) {
+
         return new Date(d);
       }
+
 
       d.setDate(
         d.getDate() + 1
       );
     }
 
+
     return null;
   }
 
 
-  /* ==============================
-     ランク判定
-  ============================== */
+  /* ==================================================
+     次ランク
+  ================================================== */
 
-  function determineRank(
-    joinDate,
-    today
-  ) {
+  function getNextRank(rank) {
 
-    const stayDays =
-      daysBetween(
-        joinDate,
-        today
-      ) + 1;
+    if (
+      rank === "新規" ||
+      rank === "新参"
+    ) {
 
-    const totalDays =
-      daysBetween(
-        OPEN_DATE,
-        today
-      ) + 1;
-
-    const ratio =
-      stayDays / totalDays;
-
-    let rank;
-    let message;
-    let nextTarget = null;
-    let nextName = null;
-
-
-    /* 参加7日以内 */
-    if (stayDays <= 7) {
-
-      rank = "新規";
-
-      message =
-        "ようこそ！まずは中参を目指そう！";
-
-      nextTarget = 0.25;
-      nextName = "中参";
+      return {
+        name: "中参",
+        ratio: 0.25
+      };
     }
 
 
-    /* 古参 */
-    else if (ratio >= 0.70) {
+    if (
+      rank === "中参"
+    ) {
 
-      rank = "古参";
-
-      message =
-        "これからも長くオプにいてね";
+      return {
+        name: "準古参",
+        ratio: 0.50
+      };
     }
 
 
-    /* 準古参 */
-    else if (ratio >= 0.50) {
+    if (
+      rank === "準古参"
+    ) {
 
-      rank = "準古参";
-
-      message =
-        "もう一息で古参！";
-
-      nextTarget = 0.70;
-      nextName = "古参";
+      return {
+        name: "古参",
+        ratio: 0.70
+      };
     }
 
 
-    /* 中参 */
-    else if (ratio >= 0.25) {
-
-      rank = "中参";
-
-      message =
-        "少しずつ歴史が増えてきたね！";
-
-      nextTarget = 0.50;
-      nextName = "準古参";
-    }
-
-
-    /* 新参 */
-    else {
-
-      rank = "新参";
-
-      message =
-        "ここからがスタート！";
-
-      nextTarget = 0.25;
-      nextName = "中参";
-    }
-
-
-    return {
-      rank,
-      message,
-      nextTarget,
-      nextName,
-      ratio,
-      stayDays,
-      totalDays
-    };
+    return null;
   }
 
 
-  /* ==============================
+  /* ==================================================
      メイン判定
-  ============================== */
+  ================================================== */
 
   function judge() {
 
@@ -640,17 +1586,20 @@
         "joinDate"
       ).value;
 
+
     const result =
       document.getElementById(
         "result"
       );
 
-    result.style.display = "block";
 
-    result.className = "box";
+    result.style.display =
+      "block";
+
+    result.className =
+      "box";
 
 
-    /* 未入力 */
     if (!input) {
 
       result.innerHTML = `
@@ -659,6 +1608,8 @@
         </div>
       `;
 
+      hideTimeline();
+
       return;
     }
 
@@ -666,27 +1617,34 @@
     const joinDate =
       parseInputDate(input);
 
+
     const today =
-      normalizeDate(new Date());
+      normalizeDate(
+        new Date()
+      );
 
 
-    /* オプ創設前 */
-    if (joinDate < OPEN_DATE) {
+    if (
+      joinDate < OPEN_DATE
+    ) {
 
       result.innerHTML = `
         <div class="error">
           入力した日にちの時、
           このオプはまだ存在していないよ。<br>
-          正確な参加日を思い出して！
+          正確な日にちを思い出して！
         </div>
       `;
+
+      hideTimeline();
 
       return;
     }
 
 
-    /* 未来の日付 */
-    if (joinDate > today) {
+    if (
+      joinDate > today
+    ) {
 
       result.innerHTML = `
         <div class="error">
@@ -695,39 +1653,39 @@
         </div>
       `;
 
+      hideTimeline();
+
       return;
     }
 
 
-    /* ==============================
-       全期間基準で判定
-    ============================== */
-
-    const data =
-      determineRank(
+    const current =
+      getRankAtDate(
         joinDate,
         today
       );
 
 
     result.classList.add(
-      `bg-${data.rank}`
+      `bg-${current.rank}`
     );
 
 
-    /* ==============================
-       次のランク
-    ============================== */
+    const next =
+      getNextRank(
+        current.rank
+      );
+
 
     let nextText = "";
 
 
-    if (data.nextTarget) {
+    if (next) {
 
       const promotionDate =
         findPromotionDate(
           joinDate,
-          data.nextTarget
+          next.ratio
         );
 
 
@@ -740,11 +1698,13 @@
           );
 
 
-        if (remain <= 0) {
+        if (
+          remain <= 0
+        ) {
 
           nextText = `
             <div class="celebrate">
-              🎉 ${data.nextName}に昇格！
+              🎉 ${next.name}に昇格！
               おめでとう！
             </div>
           `;
@@ -754,7 +1714,7 @@
           nextText = `
             <div class="sub">
               <span class="highlight">
-                ${data.nextName}
+                ${next.name}
               </span>
               まであと
               <span class="highlight">
@@ -762,7 +1722,9 @@
               </span>
               日
               <br>
-              （${formatDate(promotionDate)}）
+              （${formatDate(
+                promotionDate
+              )}）
             </div>
           `;
         }
@@ -770,24 +1732,60 @@
     }
 
 
-    /* ==============================
-       旧オプ参加者実績
-    ============================== */
-
-    let achievementText = "";
+    let message;
 
 
-    if (joinDate <= OLD_CLOSE_DATE) {
+    if (
+      current.rank === "古参"
+    ) {
 
-      achievementText = `
+      message =
+        "これからも長くオプにいてね";
+
+    } else if (
+      current.rank === "準古参"
+    ) {
+
+      message =
+        "もう一息で古参！";
+
+    } else if (
+      current.rank === "中参"
+    ) {
+
+      message =
+        "少しずつ歴史が増えてきたね！";
+
+    } else if (
+      current.rank === "新規"
+    ) {
+
+      message =
+        "ようこそ！まずは中参を目指そう！";
+
+    } else {
+
+      message =
+        "ここからがスタート！";
+    }
+
+
+    let achievement = "";
+
+
+    if (
+      joinDate <= OLD_CLOSE_DATE
+    ) {
+
+      achievement = `
         <div class="achievement">
 
           <div class="achievement-title">
-            🏆 実績
+            🏆実績
           </div>
 
           <div class="achievement-name">
-            旧オプ参加者
+            旧オプメンバー
           </div>
 
           <div class="achievement-description">
@@ -799,10 +1797,6 @@
     }
 
 
-    /* ==============================
-       結果表示
-    ============================== */
-
     result.innerHTML = `
 
       <div class="sub">
@@ -813,8 +1807,10 @@
 
         あなたは<br>
 
-        <span class="rank-name rank-${data.rank}">
-          ${data.rank}
+        <span
+          class="rank-name rank-${current.rank}"
+        >
+          ${current.rank}
         </span>
 
         <br>
@@ -824,30 +1820,2709 @@
       </div>
 
       <div class="sub">
-        ${data.message}
+        ${message}
       </div>
 
       ${nextText}
 
-      ${achievementText}
+      ${achievement}
 
     `;
+
+
+    showTimeline(
+      joinDate,
+      today
+    );
   }
 
 
-  /* ==============================
-     今日、古参になる人の参加日
-  ============================== */
+  /* ==================================================
+     通常メーター
+  ================================================== */
+
+  function showTimeline(
+    joinDate,
+    today
+  ) {
+
+    timelineJoinDate =
+      new Date(joinDate);
+
+    timelineToday =
+      new Date(today);
+
+
+    const currentRank =
+      getRankAtDate(
+        joinDate,
+        today
+      );
+
+
+    const newbieDate =
+      new Date(joinDate);
+
+
+    newbieDate.setDate(
+      newbieDate.getDate() + 7
+    );
+
+
+    const midDate =
+      findPromotionDate(
+        joinDate,
+        0.25
+      );
+
+
+    const semiDate =
+      findPromotionDate(
+        joinDate,
+        0.50
+      );
+
+
+    const oldDate =
+      findPromotionDate(
+        joinDate,
+        0.70
+      );
+
+
+    const track =
+      document.getElementById(
+        "simpleTrack"
+      );
+
+
+    const popup =
+      document.getElementById(
+        "simpleDatePopup"
+      );
+
+
+    track.innerHTML = "";
+
+    popup.classList.remove(
+      "visible"
+    );
+
+
+    const isOld =
+      currentRank.rank === "古参";
+
+
+    const pParticipation = 0;
+    const pNew = isOld ? 20 : 25;
+    const pMid = isOld ? 40 : 50;
+    const pSemi = isOld ? 60 : 75;
+    const pOld = isOld ? 80 : 100;
+
+
+    if (isOld) {
+
+      addSimpleSegment(
+        track,
+        0,
+        20,
+        "segment-newbie"
+      );
+
+      addSimpleSegment(
+        track,
+        20,
+        40,
+        "segment-new"
+      );
+
+      addSimpleSegment(
+        track,
+        40,
+        60,
+        "segment-mid"
+      );
+
+      addSimpleSegment(
+        track,
+        60,
+        80,
+        "segment-semi"
+      );
+
+      addSimpleSegment(
+        track,
+        80,
+        100,
+        "segment-old"
+      );
+
+    } else {
+
+      addSimpleSegment(
+        track,
+        0,
+        25,
+        "segment-newbie"
+      );
+
+      addSimpleSegment(
+        track,
+        25,
+        50,
+        "segment-new"
+      );
+
+      addSimpleSegment(
+        track,
+        50,
+        75,
+        "segment-mid"
+      );
+
+      addSimpleSegment(
+        track,
+        75,
+        100,
+        "segment-semi"
+      );
+    }
+
+
+    addSimpleMilestone(
+      track,
+      pParticipation,
+      "参加",
+      joinDate,
+      "dot-participation",
+      "📅 参加日"
+    );
+
+
+    addSimpleMilestone(
+      track,
+      pNew,
+      "新参",
+      newbieDate,
+      "dot-new",
+      "新参にランクアップ"
+    );
+
+
+    addSimpleMilestone(
+      track,
+      pMid,
+      "中参",
+      midDate,
+      "dot-mid",
+      "中参にランクアップ"
+    );
+
+
+    addSimpleMilestone(
+      track,
+      pSemi,
+      "準古参",
+      semiDate,
+      "dot-semi",
+      "準古参にランクアップ"
+    );
+
+
+    addSimpleMilestone(
+      track,
+      pOld,
+      "古参",
+      oldDate,
+      "dot-old",
+      "🏆 古参にランクアップ"
+    );
+
+
+    let currentPosition;
+
+
+    if (isOld) {
+
+      const oldDuration =
+        Math.max(
+          1,
+          daysBetween(
+            oldDate,
+            today
+          )
+        );
+
+
+      const sinceOld =
+        Math.max(
+          0,
+          daysBetween(
+            oldDate,
+            today
+          )
+        );
+
+
+      currentPosition =
+        pOld +
+        (
+          sinceOld /
+          oldDuration
+        ) *
+        (100 - pOld);
+
+    } else {
+
+      currentPosition =
+        getSimpleCurrentPosition(
+          joinDate,
+          today,
+          newbieDate,
+          midDate,
+          semiDate,
+          oldDate,
+          pParticipation,
+          pNew,
+          pMid,
+          pSemi,
+          pOld
+        );
+    }
+
+
+    addCurrentLine(
+      track,
+      currentPosition,
+      "現在"
+    );
+
+
+    setupSimpleTimelineSearch(
+      track,
+      joinDate,
+      today,
+      oldDate,
+      isOld
+    );
+
+
+    document.getElementById(
+      "currentStatus"
+    ).innerHTML = `
+
+      <div class="current-status-title">
+        現在
+      </div>
+
+      <div
+        class="current-status-rank rank-${currentRank.rank}"
+      >
+        ${currentRank.rank}
+      </div>
+
+      <div class="sub">
+        在籍率：
+        ${
+          (
+            currentRank.ratio * 100
+          ).toFixed(1)
+        }%
+      </div>
+
+    `;
+
+
+    document.getElementById(
+      "timelineBox"
+    ).style.display =
+      "block";
+  }
+
+
+  function addSimpleSegment(
+    track,
+    startPercent,
+    endPercent,
+    className
+  ) {
+
+    const segment =
+      document.createElement(
+        "div"
+      );
+
+
+    segment.className =
+      `simple-segment ${className}`;
+
+
+    segment.style.left =
+      `${startPercent}%`;
+
+
+    segment.style.width =
+      `${Math.max(
+        0,
+        endPercent -
+        startPercent
+      )}%`;
+
+
+    track.appendChild(
+      segment
+    );
+  }
+
+
+  function addSimpleMilestone(
+    track,
+    position,
+    label,
+    date,
+    dotClass,
+    popupText
+  ) {
+
+    const hitbox =
+      document.createElement(
+        "div"
+      );
+
+
+    hitbox.className =
+      "milestone-hitbox";
+
+
+    hitbox.style.left =
+      `${position}%`;
+
+
+    const dot =
+      document.createElement(
+        "div"
+      );
+
+
+    dot.className =
+      `milestone-dot ${dotClass}`;
+
+
+    const labelElement =
+      document.createElement(
+        "div"
+      );
+
+
+    labelElement.className =
+      "milestone-label";
+
+    labelElement.textContent =
+      label;
+
+
+    const dateElement =
+      document.createElement(
+        "div"
+      );
+
+
+    dateElement.className =
+      "milestone-date";
+
+    dateElement.textContent =
+      formatDate(date);
+
+
+    hitbox.appendChild(dot);
+    hitbox.appendChild(labelElement);
+    hitbox.appendChild(dateElement);
+
+
+    hitbox.addEventListener(
+      "mouseenter",
+      function() {
+
+        showSimplePopup(
+          position,
+          `
+            ${popupText}
+            <br>
+            ${formatDate(date)}
+          `
+        );
+      }
+    );
+
+
+    hitbox.addEventListener(
+      "mouseleave",
+      hideSimplePopup
+    );
+
+
+    hitbox.addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        showSimplePopup(
+          position,
+          `
+            ${popupText}
+            <br>
+            ${formatDate(date)}
+          `
+        );
+      }
+    );
+
+
+    track.appendChild(
+      hitbox
+    );
+  }
+
+
+  function showSimplePopup(
+    position,
+    html
+  ) {
+
+    const popup =
+      document.getElementById(
+        "simpleDatePopup"
+      );
+
+
+    popup.innerHTML =
+      html;
+
+
+    popup.style.left =
+      `${position}%`;
+
+
+    popup.style.top =
+      "0px";
+
+
+    popup.classList.add(
+      "visible"
+    );
+  }
+
+
+  function hideSimplePopup() {
+
+    document
+      .getElementById(
+        "simpleDatePopup"
+      )
+      .classList.remove(
+        "visible"
+      );
+  }
+
+
+  function getSimpleCurrentPosition(
+    joinDate,
+    today,
+    newbieDate,
+    midDate,
+    semiDate,
+    oldDate,
+    pParticipation,
+    pNew,
+    pMid,
+    pSemi,
+    pOld
+  ) {
+
+    if (
+      today < newbieDate
+    ) {
+
+      return interpolatePosition(
+        today,
+        joinDate,
+        newbieDate,
+        pParticipation,
+        pNew
+      );
+    }
+
+
+    if (
+      today < midDate
+    ) {
+
+      return interpolatePosition(
+        today,
+        newbieDate,
+        midDate,
+        pNew,
+        pMid
+      );
+    }
+
+
+    if (
+      today < semiDate
+    ) {
+
+      return interpolatePosition(
+        today,
+        midDate,
+        semiDate,
+        pMid,
+        pSemi
+      );
+    }
+
+
+    if (
+      today < oldDate
+    ) {
+
+      return interpolatePosition(
+        today,
+        semiDate,
+        oldDate,
+        pSemi,
+        pOld
+      );
+    }
+
+
+    return pOld;
+  }
+
+
+  function interpolatePosition(
+    date,
+    startDate,
+    endDate,
+    startPosition,
+    endPosition
+  ) {
+
+    const total =
+      Math.max(
+        1,
+        daysBetween(
+          startDate,
+          endDate
+        )
+      );
+
+
+    const current =
+      daysBetween(
+        startDate,
+        date
+      );
+
+
+    const ratio =
+      Math.max(
+        0,
+        Math.min(
+          1,
+          current / total
+        )
+      );
+
+
+    return (
+      startPosition +
+      (
+        endPosition -
+        startPosition
+      ) * ratio
+    );
+  }
+
+
+  function addCurrentLine(
+    track,
+    position,
+    label
+  ) {
+
+    const line =
+      document.createElement(
+        "div"
+      );
+
+
+    line.className =
+      "simple-current";
+
+
+    line.style.left =
+      `${position}%`;
+
+
+    track.appendChild(
+      line
+    );
+
+
+    const labelElement =
+      document.createElement(
+        "div"
+      );
+
+
+    labelElement.className =
+      "current-label";
+
+
+    labelElement.style.left =
+      `${position}%`;
+
+
+    labelElement.textContent =
+      label;
+
+
+    track.appendChild(
+      labelElement
+    );
+  }
+
+
+  /* ==================================================
+     通常メーター 日時検索
+  ================================================== */
+
+  function setupSimpleTimelineSearch(
+    track,
+    joinDate,
+    today,
+    oldDate,
+    isOld
+  ) {
+
+    const timeline =
+      document.getElementById(
+        "simpleTimeline"
+      );
+
+
+    const popup =
+      document.getElementById(
+        "simpleDatePopup"
+      );
+
+
+    const endDate =
+      isOld
+        ? today
+        : oldDate;
+
+
+    function showDateAtX(
+      clientX
+    ) {
+
+      const rect =
+        track.getBoundingClientRect();
+
+
+      const x =
+        Math.max(
+          0,
+          Math.min(
+            rect.width,
+            clientX -
+            rect.left
+          )
+        );
+
+
+      const percent =
+        (
+          x /
+          rect.width
+        ) * 100;
+
+
+      const targetDate =
+        getDateFromTimelinePosition(
+          joinDate,
+          endDate,
+          percent
+        );
+
+
+      const rankData =
+        getRankAtDate(
+          joinDate,
+          targetDate
+        );
+
+
+      popup.innerHTML = `
+        📅 ${formatDate(targetDate)}
+        <br>
+        <strong>
+          ${rankData.rank}
+        </strong>
+        <br>
+        ${
+          rankData.rank === "未参加"
+            ? "この時点ではまだ参加していません"
+            : `
+              在籍率：
+              ${
+                (
+                  rankData.ratio * 100
+                ).toFixed(1)
+              }%
+            `
+        }
+      `;
+
+
+      popup.style.left =
+        `${percent}%`;
+
+
+      popup.style.top =
+        "0px";
+
+
+      popup.classList.add(
+        "visible"
+      );
+    }
+
+
+    timeline.addEventListener(
+      "mousemove",
+      function(event) {
+
+        if (
+          event.target.closest(
+            ".milestone-hitbox"
+          )
+        ) {
+          return;
+        }
+
+
+        showDateAtX(
+          event.clientX
+        );
+      }
+    );
+
+
+    timeline.addEventListener(
+      "mouseleave",
+      function() {
+
+        popup.classList.remove(
+          "visible"
+        );
+      }
+    );
+
+
+    timeline.addEventListener(
+      "touchstart",
+      function(event) {
+
+        if (
+          event.target.closest(
+            ".milestone-hitbox"
+          )
+        ) {
+          return;
+        }
+
+
+        showDateAtX(
+          event.touches[0].clientX
+        );
+
+        event.preventDefault();
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    timeline.addEventListener(
+      "touchmove",
+      function(event) {
+
+        if (
+          event.target.closest(
+            ".milestone-hitbox"
+          )
+        ) {
+          return;
+        }
+
+
+        showDateAtX(
+          event.touches[0].clientX
+        );
+
+        event.preventDefault();
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    timeline.addEventListener(
+      "touchend",
+      function() {
+
+        setTimeout(
+          function() {
+
+            popup.classList.remove(
+              "visible"
+            );
+
+          },
+          2000
+        );
+      }
+    );
+  }
+
+
+  function getDateFromTimelinePosition(
+    startDate,
+    endDate,
+    percent
+  ) {
+
+    const total =
+      Math.max(
+        0,
+        daysBetween(
+          startDate,
+          endDate
+        )
+      );
+
+
+    const offset =
+      Math.round(
+        total *
+        percent /
+        100
+      );
+
+
+    const date =
+      new Date(startDate);
+
+
+    date.setDate(
+      date.getDate() +
+      offset
+    );
+
+
+    return date;
+  }
+
+
+  /* ==================================================
+     精密タイムライン
+  ================================================== */
+
+  function openPrecisionTimeline() {
+
+    const modal =
+      document.getElementById(
+        "precisionModal"
+      );
+
+
+    modal.classList.add(
+      "visible"
+    );
+
+
+    buildPrecisionTimeline();
+
+
+    requestAnimationFrame(
+      function() {
+
+        requestAnimationFrame(
+          function() {
+
+            scrollToParticipation();
+
+            updatePrecisionJoinSnapPosition();
+
+            setPrecisionSnapEnabled(true);
+
+          }
+        );
+      }
+    );
+  }
+
+
+  function closePrecisionTimeline() {
+
+    document
+      .getElementById(
+        "precisionModal"
+      )
+      .classList.remove(
+        "visible"
+      );
+  }
+
+
+  function buildPrecisionTimeline() {
+
+    const track =
+      document.getElementById(
+        "precisionTrack"
+      );
+
+
+    const popup =
+      document.getElementById(
+        "precisionDatePopup"
+      );
+
+
+    const historyPopup =
+      document.getElementById(
+        "historyPinPopup"
+      );
+
+
+    /*
+      判定し直した時にも
+      古い旧オプ領域は残さない。
+    */
+
+    track
+      .querySelectorAll(
+        ".precision-old-era"
+      )
+      .forEach(
+        element => element.remove()
+      );
+
+
+    track.innerHTML = "";
+
+
+    popup.classList.remove(
+      "visible"
+    );
+
+    popup.classList.remove(
+      "marker-mode"
+    );
+
+    historyPopup.classList.remove(
+      "visible"
+    );
+
+
+    const joinDate =
+      normalizeDate(
+        timelineJoinDate
+      );
+
+
+    const today =
+      normalizeDate(
+        timelineToday
+      );
+
+
+    const currentRank =
+      getRankAtDate(
+        joinDate,
+        today
+      );
+
+
+    const newbieDate =
+      new Date(joinDate);
+
+
+    newbieDate.setDate(
+      newbieDate.getDate() + 7
+    );
+
+
+    const midDate =
+      findPromotionDate(
+        joinDate,
+        0.25
+      );
+
+
+    const semiDate =
+      findPromotionDate(
+        joinDate,
+        0.50
+      );
+
+
+    const oldDate =
+      findPromotionDate(
+        joinDate,
+        0.70
+      );
+
+
+    const endDate =
+      currentRank.rank === "古参"
+        ? new Date(today)
+        : new Date(oldDate);
+
+
+    const totalDays =
+      Math.max(
+        1,
+        daysBetween(
+          OPEN_DATE,
+          endDate
+        )
+      );
+
+
+    function position(date) {
+
+      const elapsed =
+        daysBetween(
+          OPEN_DATE,
+          date
+        );
+
+
+      return (
+        elapsed /
+        totalDays
+      ) * 100;
+    }
+
+
+    /* ==================================================
+       参加後の帯
+    ================================================== */
+
+    addPrecisionSegment(
+      track,
+      position(joinDate),
+      position(newbieDate),
+      "precision-newbie"
+    );
+
+
+    addPrecisionSegment(
+      track,
+      position(newbieDate),
+      position(midDate),
+      "precision-new"
+    );
+
+
+    addPrecisionSegment(
+      track,
+      position(midDate),
+      position(semiDate),
+      "precision-mid"
+    );
+
+
+    addPrecisionSegment(
+      track,
+      position(semiDate),
+      position(oldDate),
+      "precision-semi"
+    );
+
+
+    addPrecisionSegment(
+      track,
+      position(oldDate),
+      100,
+      "precision-old"
+    );
+
+
+    /* ==================================================
+       年月目盛り
+    ================================================== */
+
+    addTimeScale(
+      track,
+      OPEN_DATE,
+      endDate,
+      position
+    );
+
+
+    /* ==================================================
+       旧オプ領域
+       ★ trackと同じ座標系
+    ================================================== */
+
+    const secondOpenDate =
+      new Date(2026, 4, 18);
+
+
+    if (
+      secondOpenDate <= endDate
+    ) {
+
+      addPrecisionOldEra(
+        track,
+        position(secondOpenDate)
+      );
+    }
+
+
+    /* ==================================================
+       参加
+    ================================================== */
+
+    addPrecisionMilestone(
+      track,
+      position(joinDate),
+      "参加",
+      joinDate,
+      "dot-participation",
+      "📅 参加日"
+    );
+
+
+    addPrecisionSnapPoint(
+      track,
+      position(joinDate)
+    );
+
+
+    /* ==================================================
+       ランクアップ
+    ================================================== */
+
+    addPrecisionMilestone(
+      track,
+      position(newbieDate),
+      "新参",
+      newbieDate,
+      "dot-new",
+      "新参にランクアップ"
+    );
+
+
+    addPrecisionMilestone(
+      track,
+      position(midDate),
+      "中参",
+      midDate,
+      "dot-mid",
+      "中参にランクアップ"
+    );
+
+
+    addPrecisionMilestone(
+      track,
+      position(semiDate),
+      "準古参",
+      semiDate,
+      "dot-semi",
+      "準古参にランクアップ"
+    );
+
+
+    addPrecisionMilestone(
+      track,
+      position(oldDate),
+      "古参",
+      oldDate,
+      "dot-old",
+      "🏆古参にランクアップ"
+    );
+
+
+    /* ==================================================
+       固定イベント
+    ================================================== */
+
+    addHistoryPin(
+      track,
+      position(OPEN_DATE),
+      "creation",
+      "2023/12/25",
+      "初代オプ誕生"
+    );
+
+
+    if (
+      secondOpenDate <= endDate
+    ) {
+
+      addHistoryPin(
+        track,
+        position(secondOpenDate),
+        "change",
+        "2026/05/18",
+        "初代オプ閉鎖<br>2代目オプ作成"
+      );
+    }
+
+
+    /* ==================================================
+       現在
+    ================================================== */
+
+    const currentLine =
+      document.createElement(
+        "div"
+      );
+
+
+    currentLine.className =
+      "precision-current";
+
+
+    currentLine.style.left =
+      `${position(today)}%`;
+
+
+    track.appendChild(
+      currentLine
+    );
+
+
+    const currentLabel =
+      document.createElement(
+        "div"
+      );
+
+
+    currentLabel.className =
+      "precision-current-label";
+
+
+    currentLabel.style.left =
+      `${position(today)}%`;
+
+
+    currentLabel.textContent =
+      "現在";
+
+
+    track.appendChild(
+      currentLabel
+    );
+
+
+    /* ==================================================
+       任意位置の日付確認
+    ================================================== */
+
+    setupPrecisionTimelineSearch(
+      track,
+      joinDate,
+      endDate
+    );
+
+
+    updatePrecisionJoinSnapPosition();
+  }
+
+
+  function addPrecisionSegment(
+    track,
+    startPercent,
+    endPercent,
+    className
+  ) {
+
+    const segment =
+      document.createElement(
+        "div"
+      );
+
+
+    segment.className =
+      `precision-segment ${className}`;
+
+
+    segment.style.left =
+      `${startPercent}%`;
+
+
+    segment.style.width =
+      `${Math.max(
+        0,
+        endPercent -
+        startPercent
+      )}%`;
+
+
+    track.appendChild(
+      segment
+    );
+  }
+
+
+  function addPrecisionSnapPoint(
+    track,
+    position
+  ) {
+
+    const snapPoint =
+      document.createElement(
+        "div"
+      );
+
+
+    snapPoint.className =
+      "precision-snap-point";
+
+
+    snapPoint.style.left =
+      `${position}%`;
+
+
+    track.appendChild(
+      snapPoint
+    );
+  }
+
+
+  /* ==================================================
+     旧オプ領域
+     ★ precision-track基準
+  ================================================== */
+
+  function addPrecisionOldEra(
+    track,
+    positionPercent
+  ) {
+
+    if (!track) {
+      return;
+    }
+
+
+    /*
+      念のため、既存の領域を削除。
+    */
+
+    track
+      .querySelectorAll(
+        ".precision-old-era"
+      )
+      .forEach(
+        element => element.remove()
+      );
+
+
+    const era =
+      document.createElement(
+        "div"
+      );
+
+
+    era.className =
+      "precision-old-era";
+
+
+    /*
+      ★ここが重要。
+
+      灰色領域も2026/05/18ピンと
+      同じprecision-track基準。
+    */
+
+    era.style.left =
+      "0px";
+
+
+    era.style.width =
+      `${Math.max(
+        0,
+        track.clientWidth *
+        positionPercent /
+        100
+      )}px`;
+
+
+    /*
+      他の帯より後ろに置く。
+    */
+
+    track.prepend(
+      era
+    );
+  }
+
+
+  /* ==================================================
+     年月目盛り
+  ================================================== */
+
+  function addTimeScale(
+    track,
+    startDate,
+    endDate,
+    positionFunction
+  ) {
+
+    let cursor =
+      new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        1
+      );
+
+
+    while (
+      cursor <= endDate
+    ) {
+
+      const tick =
+        document.createElement(
+          "div"
+        );
+
+
+      const isYear =
+        cursor.getMonth() === 0;
+
+
+      tick.className =
+        isYear
+          ? "time-tick year"
+          : "time-tick";
+
+
+      tick.style.left =
+        `${positionFunction(
+          cursor
+        )}%`;
+
+
+      const label =
+        document.createElement(
+          "div"
+        );
+
+
+      label.className =
+        "time-tick-label";
+
+
+      if (isYear) {
+
+        label.textContent =
+          `${cursor.getFullYear()}年`;
+
+      } else {
+
+        label.textContent =
+          `${cursor.getMonth() + 1}月`;
+      }
+
+
+      tick.appendChild(
+        label
+      );
+
+
+      track.appendChild(
+        tick
+      );
+
+
+      cursor.setMonth(
+        cursor.getMonth() + 1
+      );
+    }
+  }
+
+
+  /* ==================================================
+     精密マーカー
+  ================================================== */
+
+  function addPrecisionMilestone(
+    track,
+    position,
+    label,
+    date,
+    dotClass,
+    popupText
+  ) {
+
+    const hitbox =
+      document.createElement(
+        "div"
+      );
+
+
+    hitbox.className =
+      "precision-hitbox";
+
+
+    hitbox.style.left =
+      `${position}%`;
+
+
+    const dot =
+      document.createElement(
+        "div"
+      );
+
+
+    dot.className =
+      `precision-dot ${dotClass}`;
+
+
+    const labelElement =
+      document.createElement(
+        "div"
+      );
+
+
+    labelElement.className =
+      "precision-label";
+
+
+    labelElement.textContent =
+      label;
+
+
+    hitbox.appendChild(dot);
+    hitbox.appendChild(labelElement);
+
+
+    /*
+      マーカーに触れた時は
+      ランクアップ専用表示。
+    */
+
+    hitbox.addEventListener(
+      "mouseenter",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        showPrecisionMarkerPopup(
+          hitbox,
+          `
+            ${popupText}
+            <br>
+            ${formatDate(date)}
+          `
+        );
+      }
+    );
+
+
+    hitbox.addEventListener(
+      "mouseleave",
+      hidePrecisionPopup
+    );
+
+
+    hitbox.addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        showPrecisionMarkerPopup(
+          hitbox,
+          `
+            ${popupText}
+            <br>
+            ${formatDate(date)}
+          `
+        );
+      }
+    );
+
+
+    track.appendChild(
+      hitbox
+    );
+  }
+
+
+  /* ==================================================
+     マーカー専用情報枠
+     左右端を自動補正
+  ================================================== */
+
+  function showPrecisionMarkerPopup(
+    markerElement,
+    html
+  ) {
+
+    const popup =
+      document.getElementById(
+        "precisionDatePopup"
+      );
+
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    const inner =
+      document.getElementById(
+        "precisionInner"
+      );
+
+
+    if (
+      !popup ||
+      !scrollArea ||
+      !inner
+    ) {
+      return;
+    }
+
+
+    popup.innerHTML =
+      html;
+
+
+    popup.classList.add(
+      "marker-mode"
+    );
+
+
+    popup.classList.add(
+      "visible"
+    );
+
+
+    const markerRect =
+      markerElement.getBoundingClientRect();
+
+
+    const innerRect =
+      inner.getBoundingClientRect();
+
+
+    const scrollRect =
+      scrollArea.getBoundingClientRect();
+
+
+    const popupWidth =
+      popup.getBoundingClientRect().width;
+
+
+    const halfWidth =
+      popupWidth / 2;
+
+
+    let viewportX =
+      markerRect.left +
+      markerRect.width / 2;
+
+
+    const minX =
+      scrollRect.left +
+      8 +
+      halfWidth;
+
+
+    const maxX =
+      scrollRect.right -
+      8 -
+      halfWidth;
+
+
+    viewportX =
+      Math.max(
+        minX,
+        Math.min(
+          maxX,
+          viewportX
+        )
+      );
+
+
+    popup.style.left =
+      `${viewportX - innerRect.left}px`;
+
+
+    popup.style.top =
+      "220px";
+  }
+
+
+  /* ==================================================
+     精密日時検索
+  ================================================== */
+
+  function setupPrecisionTimelineSearch(
+    track,
+    joinDate,
+    endDate
+  ) {
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    const popup =
+      document.getElementById(
+        "precisionDatePopup"
+      );
+
+
+    function showDateAtX(
+      clientX
+    ) {
+
+      const rect =
+        track.getBoundingClientRect();
+
+
+      const x =
+        Math.max(
+          0,
+          Math.min(
+            rect.width,
+            clientX -
+            rect.left
+          )
+        );
+
+
+      const percent =
+        (
+          x /
+          rect.width
+        ) * 100;
+
+
+      const targetDate =
+        getDateFromTimelinePosition(
+          OPEN_DATE,
+          endDate,
+          percent
+        );
+
+
+      const rankData =
+        getRankAtDate(
+          joinDate,
+          targetDate
+        );
+
+
+      popup.classList.remove(
+        "marker-mode"
+      );
+
+
+      popup.innerHTML = `
+        📅 ${formatDate(targetDate)}
+        <br>
+        <strong>
+          ${rankData.rank}
+        </strong>
+        <br>
+        ${
+          rankData.rank === "未参加"
+            ? "この時点ではまだ参加していません"
+            : `
+              在籍率：
+              ${
+                (
+                  rankData.ratio * 100
+                ).toFixed(1)
+              }%
+            `
+        }
+      `;
+
+
+      popup.classList.add(
+        "visible"
+      );
+
+
+      /*
+        情報枠の幅
+      */
+
+      const popupWidth =
+        popup.getBoundingClientRect().width;
+
+
+      const scrollRect =
+        scrollArea.getBoundingClientRect();
+
+
+      const inner =
+        document.getElementById(
+          "precisionInner"
+        );
+
+
+      const innerRect =
+        inner.getBoundingClientRect();
+
+
+      const halfWidth =
+        popupWidth / 2;
+
+
+      let viewportX =
+        clientX;
+
+
+      const minX =
+        scrollRect.left +
+        8 +
+        halfWidth;
+
+
+      const maxX =
+        scrollRect.right -
+        8 -
+        halfWidth;
+
+
+      viewportX =
+        Math.max(
+          minX,
+          Math.min(
+            maxX,
+            viewportX
+          )
+        );
+
+
+      popup.style.left =
+        `${viewportX - innerRect.left}px`;
+
+
+      popup.style.top =
+        "220px";
+    }
+
+
+    /* PC */
+
+    scrollArea.addEventListener(
+      "mousemove",
+      function(event) {
+
+        if (
+          event.target.closest(
+            ".precision-hitbox"
+          )
+        ) {
+          return;
+        }
+
+
+        if (
+          event.target.closest(
+            ".history-pin"
+          )
+        ) {
+          return;
+        }
+
+
+        showDateAtX(
+          event.clientX
+        );
+      }
+    );
+
+
+    scrollArea.addEventListener(
+      "mouseleave",
+      function() {
+
+        hidePrecisionPopup();
+      }
+    );
+
+
+    /* スマホ */
+
+    scrollArea.addEventListener(
+      "touchstart",
+      function(event) {
+
+        if (
+          event.target.closest(
+            ".precision-hitbox"
+          ) ||
+          event.target.closest(
+            ".history-pin"
+          )
+        ) {
+          return;
+        }
+
+
+        showDateAtX(
+          event.touches[0].clientX
+        );
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    scrollArea.addEventListener(
+      "touchmove",
+      function(event) {
+
+        if (
+          event.target.closest(
+            ".precision-hitbox"
+          ) ||
+          event.target.closest(
+            ".history-pin"
+          )
+        ) {
+          return;
+        }
+
+
+        showDateAtX(
+          event.touches[0].clientX
+        );
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    scrollArea.addEventListener(
+      "touchend",
+      function() {
+
+        setTimeout(
+          function() {
+
+            hidePrecisionPopup();
+
+          },
+          2000
+        );
+      }
+    );
+  }
+
+
+  function hidePrecisionPopup() {
+
+    const popup =
+      document.getElementById(
+        "precisionDatePopup"
+      );
+
+
+    popup.classList.remove(
+      "visible"
+    );
+
+
+    popup.classList.remove(
+      "marker-mode"
+    );
+  }
+
+
+  /* ==================================================
+     歴史イベントピン
+  ================================================== */
+
+  function addHistoryPin(
+    track,
+    position,
+    type,
+    dateText,
+    title
+  ) {
+
+    const pin =
+      document.createElement(
+        "div"
+      );
+
+
+    pin.className =
+      "history-pin";
+
+
+    pin.style.left =
+      `${position}%`;
+
+
+    const dot =
+      document.createElement(
+        "div"
+      );
+
+
+    dot.className =
+      `history-pin-dot ${type}`;
+
+
+    pin.appendChild(
+      dot
+    );
+
+
+    pin.addEventListener(
+      "mouseenter",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        showHistoryPinPopup(
+          pin,
+          `
+            <strong>
+              ${dateText}
+            </strong>
+            <br>
+            ${title}
+          `
+        );
+      }
+    );
+
+
+    pin.addEventListener(
+      "mouseleave",
+      hideHistoryPinPopup
+    );
+
+
+    pin.addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        showHistoryPinPopup(
+          pin,
+          `
+            <strong>
+              ${dateText}
+            </strong>
+            <br>
+            ${title}
+          `
+        );
+      }
+    );
+
+
+    track.appendChild(
+      pin
+    );
+  }
+
+
+  function showHistoryPinPopup(
+    pin,
+    html
+  ) {
+
+    const popup =
+      document.getElementById(
+        "historyPinPopup"
+      );
+
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    const inner =
+      document.getElementById(
+        "precisionInner"
+      );
+
+
+    if (
+      !popup ||
+      !scrollArea ||
+      !inner
+    ) {
+      return;
+    }
+
+
+    popup.innerHTML =
+      html;
+
+
+    popup.classList.add(
+      "visible"
+    );
+
+
+    const pinRect =
+      pin.getBoundingClientRect();
+
+
+    const scrollRect =
+      scrollArea.getBoundingClientRect();
+
+
+    const innerRect =
+      inner.getBoundingClientRect();
+
+
+    const popupWidth =
+      popup.getBoundingClientRect().width;
+
+
+    const halfWidth =
+      popupWidth / 2;
+
+
+    let viewportX =
+      pinRect.left +
+      pinRect.width / 2;
+
+
+    const minX =
+      scrollRect.left +
+      8 +
+      halfWidth;
+
+
+    const maxX =
+      scrollRect.right -
+      8 -
+      halfWidth;
+
+
+    viewportX =
+      Math.max(
+        minX,
+        Math.min(
+          maxX,
+          viewportX
+        )
+      );
+
+
+    popup.style.left =
+      `${viewportX - innerRect.left}px`;
+
+
+    popup.style.top =
+      "58px";
+  }
+
+
+  function hideHistoryPinPopup() {
+
+    document
+      .getElementById(
+        "historyPinPopup"
+      )
+      .classList.remove(
+        "visible"
+      );
+  }
+
+
+  /* ==================================================
+     精密メーター 日付位置
+  ================================================== */
+
+  function getPrecisionPosition(
+    date
+  ) {
+
+    const currentRank =
+      getRankAtDate(
+        timelineJoinDate,
+        timelineToday
+      );
+
+
+    let endDate;
+
+
+    if (
+      currentRank.rank === "古参"
+    ) {
+
+      endDate =
+        new Date(
+          timelineToday
+        );
+
+    } else {
+
+      endDate =
+        findPromotionDate(
+          timelineJoinDate,
+          0.70
+        );
+    }
+
+
+    const totalDays =
+      Math.max(
+        1,
+        daysBetween(
+          OPEN_DATE,
+          endDate
+        )
+      );
+
+
+    const elapsed =
+      daysBetween(
+        OPEN_DATE,
+        date
+      );
+
+
+    return (
+      elapsed /
+      totalDays
+    ) * 100;
+  }
+
+
+  /* ==================================================
+     参加地点のスクロール位置
+  ================================================== */
+
+  function updatePrecisionJoinSnapPosition() {
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    const inner =
+      document.getElementById(
+        "precisionInner"
+      );
+
+
+    if (
+      !scrollArea ||
+      !inner ||
+      !timelineJoinDate
+    ) {
+      return;
+    }
+
+
+    const percent =
+      getPrecisionPosition(
+        timelineJoinDate
+      );
+
+
+    const participantX =
+      inner.clientWidth *
+      percent /
+      100
+      +
+      40;
+
+
+    precisionJoinSnapPosition =
+      Math.max(
+        0,
+        participantX - 24
+      );
+
+
+    precisionLastScrollLeft =
+      scrollArea.scrollLeft;
+  }
+
+
+  /* ==================================================
+     スナップON/OFF
+  ================================================== */
+
+  function setPrecisionSnapEnabled(
+    enabled
+  ) {
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    if (!scrollArea) {
+      return;
+    }
+
+
+    if (enabled) {
+
+      scrollArea.style.scrollSnapType =
+        "x proximity";
+
+    } else {
+
+      scrollArea.style.scrollSnapType =
+        "none";
+    }
+  }
+
+
+  /* ==================================================
+     参加地点より左へ遡るための
+     方向制御
+  ================================================== */
+
+  function setupPrecisionDirectionalSnap() {
+
+    if (
+      precisionDirectionalSnapInitialized
+    ) {
+      return;
+    }
+
+
+    precisionDirectionalSnapInitialized =
+      true;
+
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    if (!scrollArea) {
+      return;
+    }
+
+
+    precisionLastScrollLeft =
+      scrollArea.scrollLeft;
+
+
+    /*
+      PCのスライドパッド・ホイール
+    */
+
+    scrollArea.addEventListener(
+      "wheel",
+      function(event) {
+
+        if (
+          precisionJoinSnapPosition === null
+        ) {
+          return;
+        }
+
+
+        /*
+          左へ進む時、参加地点付近なら
+          スナップを一時解除。
+        */
+
+        if (
+          event.deltaX < 0 &&
+          scrollArea.scrollLeft <=
+          precisionJoinSnapPosition + 80
+        ) {
+
+          setPrecisionSnapEnabled(
+            false
+          );
+
+        } else if (
+          event.deltaX > 0
+        ) {
+
+          setPrecisionSnapEnabled(
+            true
+          );
+        }
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    /*
+      実際のスクロール位置
+    */
+
+    scrollArea.addEventListener(
+      "scroll",
+      function() {
+
+        if (
+          precisionJoinSnapPosition === null
+        ) {
+          return;
+        }
+
+
+        const current =
+          scrollArea.scrollLeft;
+
+
+        const movingLeft =
+          current <
+          precisionLastScrollLeft;
+
+
+        const movingRight =
+          current >
+          precisionLastScrollLeft;
+
+
+        precisionLastScrollLeft =
+          current;
+
+
+        /*
+          参加地点より左へ入ったら
+          スナップ解除。
+        */
+
+        if (
+          current <
+          precisionJoinSnapPosition - 1
+        ) {
+
+          setPrecisionSnapEnabled(
+            false
+          );
+
+          return;
+        }
+
+
+        /*
+          参加地点付近から
+          左へ進んでいる時も解除。
+        */
+
+        if (
+          movingLeft &&
+          current <=
+          precisionJoinSnapPosition + 80
+        ) {
+
+          setPrecisionSnapEnabled(
+            false
+          );
+
+          return;
+        }
+
+
+        /*
+          十分右へ戻ったら
+          再びON。
+        */
+
+        if (
+          movingRight &&
+          current >
+          precisionJoinSnapPosition + 120
+        ) {
+
+          setPrecisionSnapEnabled(
+            true
+          );
+        }
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    /*
+      スクロール停止後にも確認
+    */
+
+    let scrollStopTimer = null;
+
+
+    scrollArea.addEventListener(
+      "scroll",
+      function() {
+
+        clearTimeout(
+          scrollStopTimer
+        );
+
+
+        scrollStopTimer =
+          setTimeout(
+            function() {
+
+              if (
+                precisionJoinSnapPosition === null
+              ) {
+                return;
+              }
+
+
+              const current =
+                scrollArea.scrollLeft;
+
+
+              /*
+                参加地点より左にいる間は
+                スナップOFFを維持。
+              */
+
+              if (
+                current <
+                precisionJoinSnapPosition
+              ) {
+
+                setPrecisionSnapEnabled(
+                  false
+                );
+
+              } else {
+
+                /*
+                  参加地点上ではON。
+                */
+
+                setPrecisionSnapEnabled(
+                  true
+                );
+              }
+
+            },
+            180
+          );
+      },
+      {
+        passive: true
+      }
+    );
+  }
+
+
+  /* ==================================================
+     精密タイムライン 初期表示
+  ================================================== */
+
+  function scrollToParticipation() {
+
+    const scrollArea =
+      document.getElementById(
+        "precisionScroll"
+      );
+
+
+    const inner =
+      document.getElementById(
+        "precisionInner"
+      );
+
+
+    if (
+      !scrollArea ||
+      !inner ||
+      !timelineJoinDate
+    ) {
+      return;
+    }
+
+
+    const percent =
+      getPrecisionPosition(
+        timelineJoinDate
+      );
+
+
+    const participantX =
+      inner.clientWidth *
+      percent /
+      100
+      +
+      40;
+
+
+    const target =
+      Math.max(
+        0,
+        participantX - 24
+      );
+
+
+    scrollArea.scrollLeft =
+      target;
+
+
+    precisionLastScrollLeft =
+      target;
+  }
+
+
+  /* ==================================================
+     今日古参
+  ================================================== */
 
   function showTodayVeteran() {
 
     const today =
-      normalizeDate(new Date());
+      normalizeDate(
+        new Date()
+      );
 
 
-    /*
-      全期間の日数
-    */
     const totalDays =
       daysBetween(
         OPEN_DATE,
@@ -855,22 +4530,15 @@
       ) + 1;
 
 
-    /*
-      古参に必要な在籍日数
-      70%以上なので切り上げ
-    */
     const requiredStayDays =
       Math.ceil(
         totalDays * 0.70
       );
 
 
-    /*
-      今日の時点で必要在籍日数を
-      満たす最も新しい参加日。
-    */
     const veteranJoinDate =
       new Date(today);
+
 
     veteranJoinDate.setDate(
       veteranJoinDate.getDate()
@@ -888,119 +4556,77 @@
       </div>
 
       <div class="today-date">
-        ${formatDate(veteranJoinDate)}
+        ${formatDate(
+          veteranJoinDate
+        )}
       </div>
 
       <div class="sub">
-        この日以前に参加している人は、
-        今日の時点で古参です。
+        今日この日に参加した人が
+        古参条件を満たします。
       </div>
-
-	<div class="version-info">
-  	ぽぴオプ古参判定機 v2.0.0
-  	<br>
-  	最終更新：2026/08/13
-  	<br>
-  	<button class="history-button" onclick="openVersionHistory()">
-  	  📜 バージョン履歴
-  	</button>
-	</div>
 
     `;
   }
 
 
-  /* ==============================
-     ページ読み込み時
-  ============================== */
+  /* ==================================================
+     バージョン履歴
+  ================================================== */
+
+  function openVersionHistory() {
+
+    document
+      .getElementById(
+        "versionModal"
+      )
+      .classList.add(
+        "visible"
+      );
+  }
+
+
+  function closeVersionHistory() {
+
+    document
+      .getElementById(
+        "versionModal"
+      )
+      .classList.remove(
+        "visible"
+      );
+  }
+
+
+  document.addEventListener(
+    "click",
+    function(event) {
+
+      const modal =
+        document.getElementById(
+          "versionModal"
+        );
+
+
+      if (
+        event.target === modal
+      ) {
+
+        closeVersionHistory();
+      }
+    }
+  );
+
+
+  /* ==================================================
+     初期化
+  ================================================== */
 
   showTodayVeteran();
 
-/* =========================
-   バージョン履歴
-========================= */
-
-function openVersionHistory() {
-  const modal =
-    document.getElementById("versionModal");
-
-  modal.style.display = "flex";
-}
-
-function closeVersionHistory() {
-  const modal =
-    document.getElementById("versionModal");
-
-  modal.style.display = "none";
-}
-
-/*
-  背景部分をタップしても閉じる
-*/
-document.addEventListener("click", function(event) {
-
-  const modal =
-    document.getElementById("versionModal");
-
-  if (event.target === modal) {
-    closeVersionHistory();
-  }
-
-});
+  setupPrecisionDirectionalSnap();
 
 </script>
-
-<div id="versionModal" class="version-modal">
-
-  <div class="version-modal-content">
-
-    <button
-      class="close-button"
-      onclick="closeVersionHistory()"
-      aria-label="閉じる"
-    >
-      ×
-    </button>
-
-    <h2>📜 バージョン履歴</h2>
-
-    <div class="version-item">
-      <div class="version-title">
-        v2.0.0
-      </div>
-
-      <div class="version-date">
-        2026/08/13
-      </div>
-
-      <ul>
-        <li>新オプに対応</li>
-        <li>「🏆 旧オプ参加者」実績を追加</li>
-        <li>「今日、古参になる人の参加日」の計算を修正</li>
-      </ul>
-    </div>
-
-    <div class="version-item">
-      <div class="version-title">
-        v1.0.0
-      </div>
-
-      <div class="version-date">
-        初代公開版
-      </div>
-
-      <ul>
-        <li>古参判定機を公開</li>
-        <li>古参・準古参・中参・新参を実装</li>
-        <li>新規ランクを実装</li>
-        <li>昇格予定日を表示</li>
-        <li>スマホ表示に対応</li>
-      </ul>
-    </div>
-
-  </div>
-
-</div>
 
 </body>
 </html>
